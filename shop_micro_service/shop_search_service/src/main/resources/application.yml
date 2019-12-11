@@ -1,0 +1,20 @@
+spring:
+  data:
+    solr:
+      host: http://192.168.40.166:8983/solr/mycollection
+  rabbitmq:
+    host: 192.168.40.166
+    username: admin
+    password: admin
+    virtual-host: /admin
+    port: 5672
+dubbo:
+  application:
+    name: search-service
+  registry:
+    address: zookeeper://192.168.40.166:2181
+  consumer:
+    check: false
+    timeout: 30000
+  protocol:
+    port: -1

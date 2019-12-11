@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath() + '/'}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Insert title here</title>
+    <!-- Invalid Stylesheet. This makes stuff look pretty. Remove it if you want the CSS completely valid -->
+    <!-- Reset Stylesheet -->
+    <link rel="stylesheet" href="resources/css/reset.css" type="text/css"
+          media="screen" />
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="resources/css/style.css" type="text/css"
+          media="screen" />
+    <link rel="stylesheet" href="resources/css/invalid.css" type="text/css"
+          media="screen" />
+
+
+    <!-- jQuery Configuration -->
+    <!--<script type="text/javascript"
+            src="resources/scripts/simpla.jquery.configuration.js"></script>-->
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="resources/scripts/jquery-1.8.3.min.js"></script>
+
+    <!--添加弹窗依赖-->
+    <script src="resources/widget/dialog/jquery-ui-1.9.2.custom.min.js"></script>
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+
+    <!-- 引入webuploader依赖 -->
+    <script src="resources/widget/webuploader/webuploader.min.js"></script>
+    <link rel="stylesheet" href="resources/widget/webuploader/webuploader.css"/>
+
+</head>
+<body>
+<div id="main-content">
+    <div class="content-box">
+        <!-- End .content-box-header -->
+        <div class="content-box-content">
+            <div class="tab-content default-tab" id="tab1">
+                <table>
+                    <thead>
+                    <tr>
+                        <th><input class="check-all" type="checkbox" /></th>
+                        <th>商品编号</th>
+                        <th>商品标题</th>
+                        <th>商品封面</th>
+                        <th>价格</th>
+                        <th>库存</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            <div class="bulk-actions align-left">
+                                <a class="mybutton" onclick="do_dialog()">添加商品</a>
+                            </div>
+                            <div class="pagination">
+                                <a href="#" title="First Page">&laquo; First</a>
+                                <a href="#" title="Previous Page">&laquo; Previous</a>
+                                <a href="#" class="number" title="1">1</a>
+                                <a href="#" class="number" title="2">2</a>
+                                <a href="#" class="number current" title="3">3</a>
+                                <a href="#" class="number" title="4">4</a>
+                                <a href="#" title="Next Page">Next &raquo;</a>
+                                <a href="#" title="Last Page">Last &raquo;</a>
+                            </div> <!-- End .pagination -->
+                            <div class="clear"></div>
+                        </td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr th:each="g : ${goodsList}">
+                        <td><input type="checkbox" /></td>
+                        <th th:text="${g.id}">商品编号</th>
+                        <th th:text="${g.subject}">商品标题</th>
+                        <th>
+                            <img th:src="${g.fmUrl}" style="height: 100px;width: 100px">
+                        </th>
+                        <th th:text="${#numbers.formatCurrency(g.price)}">价格</th>
+                        <th th:text="${g.save}">库存</th>
+                        <td>
+                            <!-- Icons --> <a href="#" title="Edit"><img
+                                src="resources/images/icons/pencil.png" alt="Edit" /></a> <a
+                                href="#" title="Delete"><img
+                                src="resources/images/icons/cross.png" alt="Delete" /></a> <a
+                                href="#" title="Edit Meta"><img
+                                src="resources/images/icons/hammer_screwdriver.png"
+                                alt="Edit Meta" /></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- End .content-box-content -->
+    </div>
+</div>
+<!-- End #main-content -->
+
+<script type="text/javascript">
+
+    $(function () {
+        //图片上传插件初始化
+        var uploader = WebUploader.create({
+            //是否自动上传，选择是
+            auto: true,
+            // swf文件路径
+            swf: '/resources/widget/webuploader/Uploader.swf',
+            // 文件接收服务端。
+            server: '/goods/uploader',
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#fmUploader',
+
+            // 只允许选择图片文件。
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
+
+
+        /**
+         * 图片上传回调
+         */
+        uploader.on('uploadSuccess',function (file,response) {
+           if(response.code=="200")
+           {
+                $("#fm_img").attr("src",response.data);
+                $("#fmUrl").val(response.data);
+           }else {
+               alert("文件上传失败！");
+           }
+        });
+    })
+
+
+    $(function () {
+        //图片上传插件初始化
+        var uploader = WebUploader.create({
+            //是否自动上传，选择是
+            auto: true,
+            // swf文件路径
+            swf: '/resources/widget/webuploader/Uploader.swf',
+            // 文件接收服务端。
+            server: '/goods/uploader',
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#other_uploader',
+
+            // 只允许选择图片文件。
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
+
+
+        /**
+         * 图片上传回调
+         */
+        uploader.on('uploadSuccess',function (file,response) {
+            if(response.code=="200")
+            {
+                var html="<img style='width: 120px; height: 120px; margin: 20px' src='"+response.data+"'/>"
+                $("#imgdiv").append(html);
+                //设置图片路径隐藏域
+                var htmlHidden="<input type='hidden' name='otherImgUrl' value='"+response.data+"' />"
+                $("#imgurl").append(htmlHidden);
+            }else {
+                alert("文件上传失败！");
+            }
+        });
+    })
+
+    //弹出框
+    function do_dialog(){
+
+        $("#myDialog").dialog({
+            width: 800,
+            height: 600,
+            title: "添加商品",
+            //背景不能点
+            modal: true
+        });
+    }
+</script>
+
+<div id="myDialog" style="display: none;">
+    <!-- Start .content-box-content -->
+    <div class="content-box-content">
+        <div class="tab-content default-tab" id="tab2">
+            <form action="/goods/insert" method="post">
+                <fieldset>
+                    <p>
+                        <label>商品标题</label>
+                        <input
+                                class="text-input medium-input datepicker" type="text"
+                                name="subject" />
+                    </p>
+                    <p>
+                        <label>上传封面</label>
+                        <img id="fm_img" style="width: 120px; height: 120px"/>
+                        <input type="hidden" id="fmUrl" name="fmUrl"/>
+                        <div id="fmUploader">选择图片</div>
+
+                    <p>
+
+                        <label>上传其他图片</label>
+                    <div id="other_uploader">上传其他图片</div>
+                    <div id="imgdiv" style="width: 600px; height: 300px; border: darkgray solid 1px; margin-top: 10px"></div>
+                    <div id="imgurl">
+
+                    </div>
+                    </p>
+                    <p>
+                        <label>商品价格</label>
+                        <input
+                                class="text-input medium-input datepicker" type="text"
+                                name="price" />
+                    </p>
+                    <p>
+                        <label>商品库存</label>
+                        <input
+                                class="text-input medium-input datepicker" type="text"
+                                name="save" />
+                    </p>
+                    <p>
+                        <label>商品描述</label>
+                        <textarea class="text-input textarea wysiwyg" id="textarea"
+                                  name="info" cols="79" rows="15"></textarea>
+                    </p>
+                    <p>
+                        <button type="submit">添加商品</button>
+                    </p>
+                </fieldset>
+                <div class="clear"></div>
+            </form>
+        </div>
+    </div>
+    <!-- End .content-box-content -->
+</div>
+</body>
+</html>
