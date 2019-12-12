@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath() + '/'}" />
+    <meta charset="UTF-8">
+    <title>忘记密码</title>
+</head>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        $("#send").click(function () {
+            var username= $("#username").val();
+            $(this).attr("disabled","disabled");
+            djs(this);
+
+            $.ajax({
+                url:"/forget/sendMsg",
+                data:{"username":username},
+                success:function (data) {
+                    if(data.code == "200")
+                    {
+                        alert("发送成功");
+                    }else {
+                        alert(data.msg);
+                    }
+                },
+                dataType:"json"
+            })
+        })
+    })
+    var time=10;
+    function djs(ele) {
+
+        if(time==0)
+        {
+            $(ele).removeAttr("disabled");
+            $(ele).val("找回密码");
+            time=10;
+            return;
+        }
+
+        $(ele).val("邮件已发送，请等候"+time+"秒");
+
+        setTimeout(function () {
+            time--;
+            djs(ele);
+        },1000);
+    }
+
+</script>
+
+<body>
+    <table>
+        <h2>忘记密码</h2>
+        <tr>
+            <td>用户名：</td>
+            <td>
+                <input type="text" id="username" name="username" />
+            </td>
+        </tr>
+
+        <tr>
+
+            <td colspan="2">
+                <input type="button" id="send" value="找回密码" />
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

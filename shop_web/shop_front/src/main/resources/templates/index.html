@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <base th:href="${#request.getContextPath() + '/'}" />
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <title>ShopCZ-首页</title>
     <link rel="stylesheet" href="css/base.css" type="text/css" />
@@ -20,7 +21,10 @@
         <div class="shop_hd_topNav_all">
             <!-- Header TopNav Left -->
             <div class="shop_hd_topNav_all_left">
-                <p>您好，欢迎来到<b><a href="/">ShopCZ商城</a></b>[<a>登录</a>][<a>注册</a>]</p>
+                <p>
+                    <!--您好，欢迎来到<b><a href="/">ShopCZ商城</a></b>-->
+                    [<a href="http://localhost:8084/sso/toLogin">登录</a>][<a href="http://localhost:8084/sso/toRegister">注册</a>]
+                </p>
             </div>
             <!-- Header TopNav Left End -->
 
