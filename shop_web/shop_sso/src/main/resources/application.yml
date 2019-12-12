@@ -1,0 +1,23 @@
+server:
+  port: 8084
+spring:
+  thymeleaf:
+    cache: false
+  rabbitmq:
+    host: 192.168.40.166
+    username: admin
+    password: admin
+    virtual-host: /admin
+    port: 5672
+dubbo:
+  application:
+    name: web-sso
+  registry:
+    address: zookeeper://192.168.40.166:2181
+  consumer:
+    check: false
+    timeout: 10000
+    retries: 0
+  protocol:
+    port: -1
+
